@@ -1,0 +1,52 @@
+<DecisionTable name="ScholarshipEligibilityRules" hitPolicy="FIRST">
+  <Input name="GPA" type="float" />
+  <Input name="FamilyIncome" type="float" />
+  <Input name="DisciplinaryRecord" type="boolean" />
+  <Input name="AcademicDiscipline" type="string" />
+  <Input name="PriorityDiscipline" type="list" />
+  <Input name="PreviousScholarship" type="boolean" />
+  <Input name="SocioeconomicStatus" type="string" />
+
+  <Output name="Eligibility" type="string" />
+
+  <Rule>
+    <Condition input="GPA">lessThan(3.5)</Condition>
+    <Output name="Eligibility">Not Eligible (GPA too low)</Output>
+  </Rule>
+
+  <Rule>
+    <Condition input="FamilyIncome">greaterThan(50000)</Condition>
+    <Output name="Eligibility">Not Eligible (Income too high)</Output>
+  </Rule>
+
+  <Rule>
+    <Condition input="DisciplinaryRecord">true</Condition>
+    <Output name="Eligibility">Not Eligible (Disciplinary issue)</Output>
+  </Rule>
+
+  <Rule>
+    <Condition input="AcademicDiscipline">notIn(PriorityDiscipline)</Condition>
+    <Output name="Eligibility">Not Eligible (Non-priority discipline)</Output>
+  </Rule>
+
+  <Rule>
+    <Condition input="PreviousScholarship">true</Condition>
+    <Output name="Eligibility">Eligible (With lower priority)</Output>
+  </Rule>
+
+  <Rule>
+    <Condition input="GPA">greaterThanOrEquals(3.5)</Condition>
+    <Condition input="FamilyIncome">lessThanOrEquals(50000)</Condition>
+    <Condition input="DisciplinaryRecord">false</Condition>
+    <Condition input="AcademicDiscipline">in(PriorityDiscipline)</Condition>
+    <Condition input="PreviousScholarship">false</Condition>
+    <Output name="Eligibility">Eligible</Output>
+  </Rule>
+
+  <Rule>
+    <Condition input="SocioeconomicStatus">equals("Underrepresented")</Condition>
+    <Condition input="GPA">greaterThanOrEquals(3.5)</Condition>
+    <Condition input="FamilyIncome">lessThanOrEquals(50000)</Condition>
+    <Output name="Eligibility">Eligible (Priority due to SES)</Output>
+  </Rule>
+</DecisionTable>
